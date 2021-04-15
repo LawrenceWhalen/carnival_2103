@@ -8,4 +8,8 @@ class Attendee
     @spending_money = spending_money
     @interests = []
   end
+
+  def add_interest(name)
+    @interests.push(name)
+  end
 end
