@@ -7,5 +7,11 @@ RSpec.describe 'Attendee' do
 
       expect(attendee.class).to eq(Attendee)
     end
+    it 'has a name and an age' do
+      attendee = Attendee.new('Bob', 20)
+
+      expect(attendee.name).to eq('Bob')
+      expect(attendee.age).to eq(20)
+    end
   end
 end
