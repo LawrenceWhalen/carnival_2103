@@ -22,4 +22,12 @@ class Carnival
   def admit(attendee)
     @attendees.push(attendee)
   end
+
+  def attendees_by_ride_interest
+    @rides.each_with_object({}) do |ride, hash|
+      hash[ride] = @attendees.find_all do |attendee|
+        attendee.interests.include?(ride.name)
+      end
+    end
+  end
 end
