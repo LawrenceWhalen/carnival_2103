@@ -162,11 +162,63 @@ RSpec.describe 'Carnival' do
       jeffco_fair.admit(sally)
       jeffco_fair.admit(johnny)
 
-      allow('random').to receive(:random) do
-        johnny
+      expect(jeffco_fair.draw_lottery_winner(bumper_cars)).to eq('Johnny')
+                                                          .or eq('Bob')
+    end
+    it 'returns nil if no one is eligable' do
+      jeffco_fair = Carnival.new("Jefferson County Fair")
+      ferris_wheel = Ride.new({name: 'Ferris Wheel', cost: 0})
+      bumper_cars = Ride.new({name: 'Bumper Cars', cost: 10})
+      scrambler = Ride.new({name: 'Scrambler', cost: 15})
+      bob = Attendee.new('Bob', 0)
+      sally = Attendee.new('Sally', 20)
+      johnny = Attendee.new('Johnny', 5)
+
+      jeffco_fair.add_ride(ferris_wheel)
+      jeffco_fair.add_ride(bumper_cars)
+      jeffco_fair.add_ride(scrambler)
+
+      bob.add_interest('Ferris Wheel')
+      bob.add_interest('Bumper Cars')
+      sally.add_interest('Bumper Cars')
+      johnny.add_interest('Bumper Cars')
+
+      jeffco_fair.admit(bob)
+      jeffco_fair.admit(sally)
+      jeffco_fair.admit(johnny)
+
+      expect(jeffco_fair.draw_lottery_winner(ferris_wheel)).to eq(nil)
+    end
+  end
+  describe '#announce_lottery_winner' do
+    it 'announces the winner and what they have won' do
+      jeffco_fair = Carnival.new("Jefferson County Fair")
+      ferris_wheel = Ride.new({name: 'Ferris Wheel', cost: 0})
+      bumper_cars = Ride.new({name: 'Bumper Cars', cost: 10})
+      scrambler = Ride.new({name: 'Scrambler', cost: 15})
+      bob = Attendee.new('Bob', 0)
+      sally = Attendee.new('Sally', 20)
+      johnny = Attendee.new('Johnny', 5)
+
+      jeffco_fair.add_ride(ferris_wheel)
+      jeffco_fair.add_ride(bumper_cars)
+      jeffco_fair.add_ride(scrambler)
+
+      bob.add_interest('Ferris Wheel')
+      bob.add_interest('Bumper Cars')
+      sally.add_interest('Bumper Cars')
+      johnny.add_interest('Bumper Cars')
+
+      jeffco_fair.admit(bob)
+      jeffco_fair.admit(sally)
+      jeffco_fair.admit(johnny)
+
+      ticket_lottery_mock = double(ticket_lottery_mock)
+      allow(ticket_lottery_mock).to receive(:draw_lottery_winner) do
+        'Bob'
       end
 
-      expect(jeffco_fair.draw_lottery_winner(bumper_cars)).to eq('Johnny')
+      expect(jeffco_fair.announce_lottery_winner(scrambler)).to eq('Bob has won the IMAX exhibit')
     end
   end
 end
