@@ -213,12 +213,9 @@ RSpec.describe 'Carnival' do
       jeffco_fair.admit(sally)
       jeffco_fair.admit(johnny)
 
-      ticket_lottery_mock = double(ticket_lottery_mock)
-      allow(ticket_lottery_mock).to receive(:draw_lottery_winner) do
-        'Bob'
-      end
+      allow(jeffco_fair).to receive(:draw_lottery_winner) { 'Bob'}
 
-      expect(jeffco_fair.announce_lottery_winner(scrambler)).to eq('Bob has won the IMAX exhibit')
+      expect(jeffco_fair.announce_lottery_winner(scrambler)).to eq('Bob has won the Scrambler')
     end
   end
 end
